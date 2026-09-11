@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#20384d" />
+  <title>Fallacy Finder AI</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<header class="hero">
+  <div class="shell">
+    <div class="eyebrow">WHAT ACTUALLY HAPPENED?</div>
+    <h1>Fallacy Finder <span>AI</span></h1>
+    <p>Clarify the claim first. Separate what happened from what was felt, labeled, inferred, intended, caused, repeated, predicted, or judged. Then test the reasoning bridge.</p>
+    <div id="health" class="health">Checking AI connection…</div>
+  </div>
+</header>
+
+<main class="shell">
+  <section class="card intro">
+    <h2>Analyze a claim</h2>
+    <p class="muted">Paste the exact sentence if possible. The AI will not decide who is right. It will decompose the claim, ask only necessary qualifying questions, and compare the reasoning with the 100-trap catalog.</p>
+    <label for="claim">Exact claim or statement</label>
+    <textarea id="claim" rows="5" maxlength="4000" placeholder='Example: “You always ignore me because you don’t care.”'></textarea>
+    <details>
+      <summary>Optional context</summary>
+      <label for="context">Context</label>
+      <textarea id="context" rows="3" maxlength="5000" placeholder="Add context that may matter. The app will treat it as supplied context, not automatically as established fact."></textarea>
+    </details>
+    <div class="examples">
+      <button class="chip example" data-text="You always ignore me because you don't care.">Pattern + motive</button>
+      <button class="chip example" data-text="I feel controlled, so you are controlling me.">Feeling → fact</button>
+      <button class="chip example" data-text="You asked where I was going because you wanted to control me.">Intent claim</button>
+      <button class="chip example" data-text="If you loved me, you wouldn't need space.">Emotion + either/or</button>
+    </div>
+    <div class="actions">
+      <button id="analyzeBtn" class="primary">Analyze with AI</button>
+      <button id="resetBtn" class="secondary">Start over</button>
+    </div>
+    <div class="privacy">Your API key stays on the server. This build sends the claim and answers to the OpenAI API for analysis and requests <strong>store: false</strong>.</div>
+  </section>
+
+  <section id="loading" class="card hidden loading-card">
+    <div class="spinner"></div>
+    <div><strong>Reasoning through the claim…</strong><div class="muted">Clarifying claim types, evidence, and the reasoning bridge.</div></div>
+  </section>
+
+  <section id="errorBox" class="card error hidden"></section>
+
+  <section id="clarification" class="card hidden">
+    <div class="section-kicker">QUALIFYING QUESTIONS</div>
+    <h2>A few answers would change the analysis</h2>
+    <p class="muted">These are chosen adaptively. Answer what you know. “I don’t know” is a valid answer.</p>
+    <div id="questionList"></div>
+    <div class="actions"><button id="continueBtn" class="primary">Continue analysis</button></div>
+  </section>
+
+  <section id="results" class="hidden"></section>
+</main>
+
+<footer><div class="shell">Fallacy Finder is a reasoning aid, not a clinical, legal, or factual adjudication service. A weak argument can still point to a real concern.</div></footer>
+<script src="/app.js" defer></script>
+</body>
+</html>
