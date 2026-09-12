@@ -1,0 +1,196 @@
+{
+  "universal": {
+    "question": "What are you mainly trying to establish with this statement?",
+    "answer_type": "choice",
+    "options": [
+      "What happened",
+      "How I felt",
+      "What the behavior means",
+      "Why they did it",
+      "What caused it",
+      "Whether it is a pattern",
+      "What will happen next",
+      "What should happen",
+      "What kind of person they are",
+      "What I want or need",
+      "More than one of these"
+    ],
+    "why_needed": "This tells the app which kind of claim deserves the most weight before it tests the reasoning."
+  },
+  "event_fact": [
+    {
+      "question": "Is the event itself disputed?",
+      "answer_type": "yes_no",
+      "why_needed": "A disputed event needs support; an agreed event can be parked so the app can test what was inferred from it."
+    },
+    {
+      "question": "What is the least interpretive description of what happened?",
+      "answer_type": "text",
+      "why_needed": "This separates the raw event from labels, meanings, and motives that may have been added later."
+    }
+  ],
+  "feeling": [
+    {
+      "question": "What emotion best describes what you experienced?",
+      "answer_type": "choice",
+      "options": [
+        "Hurt",
+        "Fear",
+        "Anger",
+        "Sadness",
+        "Loneliness",
+        "Frustration",
+        "Shame",
+        "Rejection",
+        "Confusion",
+        "Other"
+      ],
+      "why_needed": "Pure emotions are treated differently from thoughts or accusations disguised as feelings."
+    },
+    {
+      "question": "Are you also making a claim about what caused that feeling?",
+      "answer_type": "yes_no",
+      "why_needed": "The feeling itself does not need proof, but a claim about its cause may need support."
+    }
+  ],
+  "behavior_label": [
+    {
+      "question": "What specific action are you labeling?",
+      "answer_type": "text",
+      "why_needed": "Words like ignored, controlling, disrespectful, manipulative, or abandoned can hide several different factual claims."
+    },
+    {
+      "question": "Could you describe the action without using the label?",
+      "answer_type": "text",
+      "why_needed": "A less interpretive description makes it easier to test whether the label actually fits."
+    }
+  ],
+  "interpretation_meaning": [
+    {
+      "question": "What evidence connects the event to the meaning you gave it?",
+      "answer_type": "text",
+      "why_needed": "Meaning is usually an inference rather than the event itself."
+    },
+    {
+      "question": "Could the same event reasonably have another meaning?",
+      "answer_type": "yes_no",
+      "why_needed": "If several meanings fit the same event, the interpretation should stay tentative until more evidence is available."
+    }
+  ],
+  "intent_motive": [
+    {
+      "question": "Did the person directly state this intention or motive?",
+      "answer_type": "yes_no",
+      "why_needed": "A stated motive is stronger evidence than a motive inferred only from behavior or impact."
+    },
+    {
+      "question": "What evidence supports the motive you are assigning?",
+      "answer_type": "text",
+      "why_needed": "Impact, foreseeability, and intent are different. This checks what actually supports the motive claim."
+    }
+  ],
+  "cause": [
+    {
+      "question": "Are you saying one event caused another, rather than simply happened before it?",
+      "answer_type": "yes_no",
+      "why_needed": "Sequence by itself does not establish causation."
+    },
+    {
+      "question": "Are there other plausible causes that could also explain the outcome?",
+      "answer_type": "yes_no",
+      "why_needed": "Competing causes help test whether the proposed causal bridge is too certain."
+    }
+  ],
+  "pattern_frequency": [
+    {
+      "question": "What time period are you talking about?",
+      "answer_type": "text",
+      "why_needed": "A pattern needs a defined scope instead of an unlimited 'always' or 'never'."
+    },
+    {
+      "question": "About how many times did it happen, out of how many relevant opportunities?",
+      "answer_type": "text",
+      "why_needed": "Occurrences without opportunities can exaggerate or hide the strength of a pattern."
+    },
+    {
+      "question": "Were there meaningful exceptions?",
+      "answer_type": "yes_no",
+      "why_needed": "Exceptions do not automatically erase a pattern, but they change how broad the pattern claim can be."
+    }
+  ],
+  "prediction": [
+    {
+      "question": "How certain are you about this prediction?",
+      "answer_type": "choice",
+      "options": [
+        "Possible",
+        "More likely than not",
+        "Very likely",
+        "Certain"
+      ],
+      "why_needed": "Predictions are forecasts, not present facts, and should carry an explicit level of certainty."
+    },
+    {
+      "question": "What evidence would make you revise this prediction?",
+      "answer_type": "text",
+      "why_needed": "A prediction should have a real way to be updated when new evidence appears."
+    }
+  ],
+  "value_rule": [
+    {
+      "question": "What kind of rule is this?",
+      "answer_type": "choice",
+      "options": [
+        "Personal preference",
+        "Mutual agreement",
+        "Cultural or social norm",
+        "Moral belief",
+        "Legal or professional rule",
+        "Not sure"
+      ],
+      "why_needed": "Values and agreements are evaluated differently from factual claims."
+    },
+    {
+      "question": "If you are claiming a mutual agreement, was it explicitly agreed?",
+      "answer_type": "yes_no",
+      "why_needed": "A claimed agreement can be examined as a fact even when the underlying value cannot be proved like a fact."
+    }
+  ],
+  "identity_character": [
+    {
+      "question": "Is the character label based on one event or a sustained pattern?",
+      "answer_type": "choice",
+      "options": [
+        "One event",
+        "A few events",
+        "A sustained pattern",
+        "Not sure"
+      ],
+      "why_needed": "A broad identity claim requires broader evidence than a single incident."
+    },
+    {
+      "question": "What specific behaviors support the character label?",
+      "answer_type": "text",
+      "why_needed": "This translates identity language back into behaviors that can actually be examined."
+    }
+  ],
+  "request_boundary": [
+    {
+      "question": "What exactly are you asking the other person to do, or what will you do yourself?",
+      "answer_type": "text",
+      "why_needed": "Requests, preferences, and boundaries are not the same kind of statement and should not be tested like ordinary factual claims."
+    },
+    {
+      "question": "Which best describes this statement?",
+      "answer_type": "choice",
+      "options": [
+        "Preference",
+        "Request",
+        "Boundary about my own action",
+        "Demand on another person",
+        "Not sure"
+      ],
+      "why_needed": "This distinguishes a personal limit from an attempt to control someone else's behavior."
+    }
+  ]
+}
