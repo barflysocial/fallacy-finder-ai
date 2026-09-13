@@ -142,3 +142,43 @@
 .live-overview-agreement{margin:14px 0;padding:12px;border:1px solid #d8d9e8;border-radius:12px;background:#f8f8fc}
 .live-overview-agreement p{margin:.45em 0}
 @media(max-width:760px){.agreement-grid{grid-template-columns:1fr}}
+
+/* v1.3.7 — response-first Quick Live hierarchy */
+.live-results-stack{display:flex;flex-direction:column;gap:12px}
+.live-primary-response{margin:0}
+.live-main-response{font-size:1.08rem;font-weight:680}
+.live-preliminary-note{margin:8px 0 12px;padding:9px 11px;border:1px solid #efd7ad;border-radius:10px;background:#fff7e8;color:#6f521f;font-size:.88rem}
+.live-qualifying-details{margin-top:14px;border:1px solid #d9e2e6;border-radius:12px;background:#f9fbfc;padding:0}
+.live-qualifying-details>summary{padding:11px 12px;color:var(--navy);font-weight:850}
+.live-qualifying-details>p{padding:0 12px;margin:.1em 0 .6em}
+.live-qualifier-item{padding:10px 12px;border-top:1px solid #e1e7e9}
+.live-qualifier-item .muted{font-size:.84rem;margin-top:3px}
+.detail-count{display:inline-flex;min-width:24px;justify-content:center;margin-left:5px;border-radius:999px;background:#e8eef1;color:#4b5f69;padding:1px 7px;font-size:.74rem}
+.live-detail-stack{display:flex;flex-direction:column;gap:8px}
+.live-detail-card{margin:0;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 18px rgba(22,38,48,.045);overflow:hidden}
+.live-detail-card>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 15px;color:var(--navy);font-weight:850;list-style-position:inside}
+.live-detail-card>summary:hover{background:#f8fafb}
+.live-detail-card[open]>summary{background:#f4f7f8;border-bottom:1px solid var(--line)}
+.detail-hint{color:var(--muted);font-size:.78rem;font-weight:650;text-align:right}
+.live-detail-body{padding:14px 15px}
+.live-detail-body>h3:first-child{margin-top:0}
+.live-detail-body .card{box-shadow:none;border-radius:12px;margin:10px 0;padding:14px}
+.live-detail-body .card:first-child{margin-top:0}
+.live-detail-body .card:last-child{margin-bottom:0}
+.live-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.live-detail-grid>div{min-width:0}
+.live-subsection{padding:4px 0 12px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.live-history-fallback{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:#fafbfb;padding:0 12px 12px}
+.live-history-fallback>summary{padding:11px 0;color:var(--navy);font-weight:850}
+.live-history-fallback .live-timeline{margin-top:0;border-top:0;padding-top:0}
+@media(max-width:700px){
+  .live-detail-grid{grid-template-columns:1fr}
+  .live-detail-card>summary{align-items:flex-start}
+  .detail-hint{max-width:44%;font-size:.73rem}
+  .live-main-response{font-size:1rem}
+}
+.live-overview-shell{margin-top:12px}
+.live-overview-details{margin:0;background:#fff;border:1px solid #cad9df;border-radius:14px;overflow:hidden}
+.live-overview-details>summary{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;color:var(--navy);font-weight:850}
+.live-overview-details[open]>summary{background:#f4f7f8;border-bottom:1px solid var(--line)}
+.live-overview-body{padding:14px}

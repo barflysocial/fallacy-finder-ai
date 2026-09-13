@@ -1,98 +1,65 @@
-# Fallacy Finder AI v1.3.6 — Agreement Verification
+# Fallacy Finder AI v1.3.7 — Response-First Quick Live
 
-The normal **Analyze a statement** workflow remains the default. **Quick live session** and **Paste transcript** remain optional input modes. All features from v1.3.5 are preserved.
+The normal **Analyze a statement** workflow remains the default. **Quick live session** and **Paste transcript** remain optional input modes. All reasoning, repair, agreement-verification, transcript, and response-target features from v1.3.6 are preserved.
 
-## New in v1.3.6
+## New in v1.3.7
 
-### Agreement Verification
-When a statement involves an agreement, promise, shared rule, or repair standard, the app now separates several questions that were previously compressed into one agreement check:
+### Quick Live is now response-first
+After you enter what the other person said, the first visible result is the response you can use next. The full analysis no longer competes with the response during a live conversation.
 
-1. **Did an agreement actually exist?**
-   - both explicitly agreed
-   - existence disputed
-   - agreement exists but terms are disputed
-   - implied / assumed
-   - preference or expectation rather than a shared agreement
-2. **What were the original terms?**
-3. **Did both people assent to the same terms?**
-4. **Was the agreement ongoing, temporary, or conditional?**
-5. **Was it later changed?**
-6. **Was the later change mutual, unilateral, disputed, or simply an agreed expiration/condition ending?**
-7. **If one person introduced new terms, did the other person later accept them?**
-8. **Were the original terms fulfilled before the later change?**
+Quick Live shows:
 
-Conditional follow-up questions stay hidden unless an agreement may actually exist, so the clarification screen does not show every agreement question for an ordinary claim.
+- **Respond to:** Other person / Therapist
+- **Best next response**
+- **Recommended / Clarify / Evidence / Direct / De-escalate**
+- **Used it / Modified it / Didn't use it**
+- **+ What did they say next?**
 
-### Unilateral Agreement Changes
-The reasoning engine now explicitly distinguishes:
+### Qualifying questions only for the other person
+Adaptive qualifying questions are no longer shown as a separate interruption during Quick Live.
 
-- **unchanged agreement**
-- **mutually changed agreement**
-- **unilaterally changed agreement**
-- **disputed change**
-- **agreement expired / condition ended**
-- **unclear**
+When **Other person** is selected, any useful qualifying questions appear in a compact collapsed section inside the response card. If the person answers one, enter that answer as their next statement and the session continues with the new context.
 
-A unilateral change does **not** automatically rewrite the original agreement. If the other person later accepts the new terms, the app can treat that as a possible new agreement from that point forward rather than pretending the term existed from the beginning.
+When **Therapist** is selected, that qualifying-question section is hidden. The therapist-directed response itself asks the therapist to structure or clarify the disputed claim fairly.
 
-### Original Fulfillment vs. Later Requirements
-The app now evaluates whether the **original agreed terms were fulfilled** separately from whether someone later asks for additional repair, reassurance, behavior, or conditions.
+### Collapsed Quick Live hierarchy
+Everything below the immediate response is minimized by default. The order is:
 
-Core rule:
+1. **Why this response?** — reasoning summary and confidence
+2. **Claim analysis** — claim status, claim parts, possible fallacies
+3. **Evidence & agreements** — evidence quality, burden of proof, agreement verification
+4. **Repair status** — appears only when repair is relevant
+5. **Unresolved questions** — missing information and what would change the result
+6. **Common ground & disputed points** — supported points versus the remaining disagreement
+7. **Full reasoning details** — reasoning bridge, dependencies, contradictions, counterexamples, timing, severity, full fallacy analysis, response self-check
+8. **Session history** — entered statements and confirmed replies
 
-> A later need can be valid without proving that the original agreement was never fulfilled.
+If Repair Status is not relevant, the repair section is omitted and the remaining sections renumber automatically.
 
-If previously agreed criteria appear to have been fulfilled and a later unilateral requirement is being used retroactively to say the original agreement was never fulfilled, the app can flag a **possible standard-shift / Moving the Goalposts issue**. It is not labeled automatically; the original terms, fulfillment, and timing of the later requirement first have to be sufficiently established.
+### Session overview is minimized too
+A saved Session Overview is collapsed when you return to Quick Live. If you explicitly press **View session overview**, it opens for that request.
 
-### Repair Claims Now Check Agreement Standards
-Repair Status automatically exposes the Agreement Verification branch because repair disputes often depend on questions such as:
-
-- What repair was actually agreed to?
-- Did both people agree that those actions were the repair standard?
-- Were those actions completed?
-- Did the harmful behavior change?
-- Was a new requirement introduced later?
-- Was that later requirement mutually accepted or unilateral?
-
-This keeps **behavioral repair**, **emotional resolution**, **agreement fulfillment**, and **later needs** as separate questions.
-
-### Richer Agreement Result Card
-The final analysis can now show:
-
-- agreement existence
-- original terms
-- mutual assent
-- duration / conditions
-- original fulfillment status
-- later change status
-- changed terms
-- whether the later terms were accepted
-- whether a retroactive-standard issue is present
-- what the agreement means for the current dispute
-
-### Quick Live Session Overview
-Quick Live Session now carries agreement status into the cumulative session overview. The overview can identify whether an agreement is central, what appears to have been mutually accepted, whether it was fulfilled, and whether later terms were mutually changed or introduced unilaterally.
+### Session-history fallback
+If a saved Quick Live session is restored before a statement analysis is reopened, a small collapsed Session History remains available. Once a current analysis is open, Session History moves to the bottom of the collapsed analysis hierarchy.
 
 ## Existing features preserved
 
 - 100 reasoning traps with local keyword/phrase routing
 - 12 selectable claim identifiers, including Repair Status
-- Evidence quality and claim certainty
-- Claim dependencies, contradictions, counterexamples, frequency vs. severity
-- Repair Evidence Mapping
-- Behavioral repair separated from emotional resolution
+- Evidence quality, claim certainty, burden of proof, dependencies, contradictions, and counterexamples
+- Agreement Verification and unilateral agreement-change tracking
+- Repair Evidence Mapping and behavioral repair vs. emotional resolution
 - No clear fallacy and insufficient information as valid outcomes
-- Paste-transcript mode with local extraction, search, filters, and pagination
+- Paste-transcript mode with all-claim extraction, search, filters, and pagination
 - Quick Live running context and Session Overview
-- Five Quick Live response choices: Recommended, Clarify, Evidence, Direct, De-escalate
+- Five response choices
 - Response target selector: Other person or Therapist
 - Clear Session
 - Check My Response
 - Browser-local analysis history and Quick Live persistence
-- AI receives only a small locally selected fallacy candidate set for individual analyses
 
 ## Deploy
 Replace the files in the existing GitHub repository with this package and commit. The existing Render service can redeploy automatically. Keep the existing `OPENAI_API_KEY` environment variable.
 
 ## Health check
-`/api/health` reports `app_version: "1.3.6"`, `agreement_verification: true`, `unilateral_agreement_change_tracking: true`, plus the existing repair, transcript, Quick Live, response-target, and session-overview features.
+`/api/health` reports `app_version: "1.3.7"` plus flags for the response-first Quick Live UI, collapsed hierarchy, and Other-Person-only qualifying-question display.

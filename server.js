@@ -942,9 +942,12 @@ app.get("/api/health", (req, res) => {
     response_target_selector: true,
     therapist_directed_responses: true,
     quick_live_clear_session: true,
+    quick_live_response_first_ui: true,
+    quick_live_collapsed_hierarchy: true,
+    quick_live_qualifying_questions_target: "other_person_only",
     quick_live_session_storage: "browser-local",
     session_overview: true,
-    app_version: "1.3.6",
+    app_version: "1.3.7",
     mode: "local-keyword-first-routing",
     candidate_limit: CANDIDATE_LIMIT
   });

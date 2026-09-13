@@ -141,23 +141,34 @@ ${lines.join('\n')}`:'No prior entered statements in this session.'
 
 function liveTurnById(id){return liveSession.turns.find(t=>t.id===id);}
 
-function renderLiveSession(){
-  if(!$('liveTimeline'))return;
-  if($('liveContextNote') && document.activeElement!==$('liveContextNote')) $('liveContextNote').value=liveSession.contextNote||'';
+function liveSessionHistoryMarkup(){
   const n=liveSession.turns.length;
-  $('liveTurnCount').textContent=`${n} statement${n===1?'':'s'} analyzed`;
-  $('liveOverviewBtn').disabled=n<2;
-  const label=liveSession.startedAt?new Date(liveSession.startedAt).toLocaleString():'';
-  $('liveSessionLabel').textContent=label?`Current session • ${label}`:'Current session';
-  if(!n){$('liveTimeline').innerHTML='<div class="live-empty muted">Statements you analyze here will build a running session timeline.</div>';return;}
-  $('liveTimeline').innerHTML=`<div class="section-kicker">SESSION TIMELINE</div><h3>Entered statements and confirmed replies</h3>${liveSession.turns.map((t,i)=>{
+  if(!n)return '<div class="live-empty muted">Statements you analyze here will build a running session timeline.</div>';
+  return `${liveSession.turns.map((t,i)=>{
     const verdict=t.analysis?.reasoning_outcome?.verdict?`<span class="type-badge">${escapeHtml(humanize(t.analysis.reasoning_outcome.verdict))}</span>`:'';
     const targetLabel=t.confirmed_response_target==='therapist'?'Therapist':'Other person';
     const reply=(t.response_status==='used'||t.response_status==='modified')&&t.confirmed_response?`<div class="live-you"><strong>You • ${t.response_status==='used'?`used ${escapeHtml(t.confirmed_response_label||'app')} response`:'modified response'} → ${targetLabel}</strong><p>${escapeHtml(t.confirmed_response)}</p></div>`:t.response_status==='not_used'?'<div class="live-response-status muted">Suggested response not used.</div>':'';
     const pending=t.analysis && (!t.response_status||t.response_status==='pending')?'<div class="live-response-status">Response use not confirmed yet.</div>':'';
     return `<article class="live-turn-card"><div class="live-turn-head"><span>Statement ${i+1}</span>${verdict}</div><div class="live-them"><strong>Them</strong><p>${escapeHtml(t.statement)}</p></div>${reply}${pending}<div class="live-turn-actions">${t.analysis?`<button type="button" class="mini-btn reopen-live-turn" data-live-id="${escapeHtml(t.id)}">Reopen analysis</button>`:''}</div></article>`;
   }).join('')}`;
+}
+
+function bindLiveReopenButtons(){
   document.querySelectorAll('.reopen-live-turn').forEach(btn=>btn.addEventListener('click',()=>reopenLiveTurn(btn.dataset.liveId)));
+}
+
+function renderLiveSession(){
+  if($('liveContextNote') && document.activeElement!==$('liveContextNote')) $('liveContextNote').value=liveSession.contextNote||'';
+  const n=liveSession.turns.length;
+  if($('liveTurnCount'))$('liveTurnCount').textContent=`${n} statement${n===1?'':'s'} analyzed`;
+  if($('liveOverviewBtn'))$('liveOverviewBtn').disabled=n<2;
+  const label=liveSession.startedAt?new Date(liveSession.startedAt).toLocaleString():'';
+  if($('liveSessionLabel'))$('liveSessionLabel').textContent=label?`Current session • ${label}`:'Current session';
+  const markup=liveSessionHistoryMarkup();
+  if($('liveTimeline'))$('liveTimeline').innerHTML=markup;
+  if($('liveHistoryInResults'))$('liveHistoryInResults').innerHTML=markup;
+  if($('liveHistoryFallback'))$('liveHistoryFallback').classList.toggle('hidden',n===0 || (session.source==='live' && !!session.last?.analysis));
+  bindLiveReopenButtons();
 }
 
 function reopenLiveTurn(id){
@@ -216,6 +227,7 @@ function selectLiveResponseTarget(target){
   const key=turn.selected_response_key||'best';
   if($('liveSelectedResponseTitle'))$('liveSelectedResponseTitle').textContent=`${key==='best'?'Best next response':`Selected response — ${liveResponseLabel(key)}`} to ${responseTargetLabel(target)}`;
   if($('liveSelectedResponseText'))$('liveSelectedResponseText').textContent=liveResponseText(turn,key,target);
+  if($('liveQualifyingQuestions'))$('liveQualifyingQuestions').classList.toggle('hidden',target!=='other_person');
   refreshLiveResponseChoices(turn);
 }
 
@@ -279,6 +291,7 @@ function renderLiveResponseStatus(turn){
 
 function nextLiveStatement(){
   switchMode('live');show('results',false);show('clarification',false);clearError();
+  session.last=null;session.liveTurnId=null;renderLiveSession();
   $('liveStatement').focus();$('liveMode').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
@@ -302,13 +315,14 @@ function clearLiveSession(){
   setTimeout(()=>$('liveStatement')?.focus(),0);
 }
 
-function renderLiveOverview(o,meta={}){
+function renderLiveOverview(o,meta={},open=false){
   if(!o)return;
   const patterns=(o.reasoning_patterns||[]).map(x=>`<div class="mini-analysis"><strong>${escapeHtml(x.pattern||'Pattern')}</strong><p>${escapeHtml(x.assessment||'')}</p>${x.turn_refs?.length?`<div class="muted">Relevant statements: ${escapeHtml(x.turn_refs.join(', '))}</div>`:''}</div>`).join('');
   const evolution=(o.claim_evolution||[]).map(x=>`<div class="dependency-row"><div><strong>Earlier</strong><p>${escapeHtml(x.from_claim||'')}</p></div><div class="dependency-arrow">→</div><div><strong>Later</strong><p>${escapeHtml(x.to_claim||'')}</p><div class="muted">${escapeHtml(x.change||'')} ${escapeHtml(x.significance||'')}</div></div></div>`).join('');
   const agreement=o.agreement_overview||{};
   const repair=o.repair_overview||{};
-  $('liveOverviewResults').innerHTML=`<div class="section-kicker">SESSION OVERVIEW</div><h2>${escapeHtml(o.main_issue||'Overall conversation picture')}</h2><p>${escapeHtml(o.summary||'')}</p><div class="live-overview-warning">${escapeHtml(o.scope_warning||'This overview is limited to entered statements and confirmed replies.')}</div><div class="result-grid"><div><strong>Common ground / supported points</strong>${list(o.common_ground)}</div><div><strong>Still disputed or unresolved</strong>${list(o.disputed_points)}</div></div>${evolution?`<h3>How claims changed or narrowed</h3><div class="dependency-list">${evolution}</div>`:''}${patterns?`<h3>Recurring reasoning patterns</h3>${patterns}`:''}${agreement.applies?`<div class="live-overview-agreement"><strong>Agreement picture</strong><p><b>Original agreement:</b> ${escapeHtml(agreement.original_agreement||'Unknown')}</p><p><b>Mutual assent:</b> ${escapeHtml(agreement.mutual_assent||'Unknown')}</p><p><b>Later change:</b> ${escapeHtml(humanize(agreement.change_status||'unclear'))}</p><p><b>Fulfillment:</b> ${escapeHtml(agreement.fulfillment_status||'Unknown')}</p><p>${escapeHtml(agreement.assessment||'')}</p></div>`:''}${repair.applies?`<div class="live-overview-repair"><strong>Repair picture</strong><p><b>Behavioral repair:</b> ${escapeHtml(repair.behavioral_repair||'Unknown')}</p><p><b>Emotional resolution:</b> ${escapeHtml(repair.emotional_resolution||'Unknown')}</p><p>${escapeHtml(repair.assessment||'')}</p></div>`:''}<h3>Current disagreement</h3><p><strong>${escapeHtml(humanize(o.current_disagreement?.type||'mixed'))}</strong> — ${escapeHtml(o.current_disagreement?.explanation||'')}</p><h3>Best next questions</h3>${list(o.next_best_questions)}<div class="quote"><strong>Caution:</strong> ${escapeHtml(o.caution||'')}</div>${meta?.estimated_cost_usd!=null?`<div class="meta">Session overview • est. API cost $${Number(meta.estimated_cost_usd).toFixed(4)}</div>`:''}`;
+  const body=`<div class="live-overview-warning">${escapeHtml(o.scope_warning||'This overview is limited to entered statements and confirmed replies.')}</div><div class="result-grid"><div><strong>Common ground / supported points</strong>${list(o.common_ground)}</div><div><strong>Still disputed or unresolved</strong>${list(o.disputed_points)}</div></div>${evolution?`<h3>How claims changed or narrowed</h3><div class="dependency-list">${evolution}</div>`:''}${patterns?`<h3>Recurring reasoning patterns</h3>${patterns}`:''}${agreement.applies?`<div class="live-overview-agreement"><strong>Agreement picture</strong><p><b>Original agreement:</b> ${escapeHtml(agreement.original_agreement||'Unknown')}</p><p><b>Mutual assent:</b> ${escapeHtml(agreement.mutual_assent||'Unknown')}</p><p><b>Later change:</b> ${escapeHtml(humanize(agreement.change_status||'unclear'))}</p><p><b>Fulfillment:</b> ${escapeHtml(agreement.fulfillment_status||'Unknown')}</p><p>${escapeHtml(agreement.assessment||'')}</p></div>`:''}${repair.applies?`<div class="live-overview-repair"><strong>Repair picture</strong><p><b>Behavioral repair:</b> ${escapeHtml(repair.behavioral_repair||'Unknown')}</p><p><b>Emotional resolution:</b> ${escapeHtml(repair.emotional_resolution||'Unknown')}</p><p>${escapeHtml(repair.assessment||'')}</p></div>`:''}<h3>Current disagreement</h3><p><strong>${escapeHtml(humanize(o.current_disagreement?.type||'mixed'))}</strong> — ${escapeHtml(o.current_disagreement?.explanation||'')}</p><h3>Best next questions</h3>${list(o.next_best_questions)}<div class="quote"><strong>Caution:</strong> ${escapeHtml(o.caution||'')}</div>${meta?.estimated_cost_usd!=null?`<div class="meta">Session overview • est. API cost $${Number(meta.estimated_cost_usd).toFixed(4)}</div>`:''}`;
+  $('liveOverviewResults').innerHTML=`<details class="live-overview-details" ${open?'open':''}><summary><span>Session overview</span><span class="detail-hint">${escapeHtml(o.main_issue||'Overall conversation picture')}</span></summary><div class="live-overview-body"><p>${escapeHtml(o.summary||'')}</p>${body}</div></details>`;
   show('liveOverviewResults',true);
 }
 
@@ -322,7 +336,7 @@ async function requestLiveOverview(){
     }));
     const r=await fetch('/api/session/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({turns,context_note:liveSession.contextNote||''})});
     const d=await r.json();if(!r.ok)throw new Error(d.error||'Unable to build the session overview.');
-    liveSession.overview={analysis:d.analysis,meta:d.meta||{},created_at:new Date().toISOString()};saveLiveSessionState();renderLiveOverview(d.analysis,d.meta||{});$('liveOverviewResults').scrollIntoView({behavior:'smooth',block:'start'});
+    liveSession.overview={analysis:d.analysis,meta:d.meta||{},created_at:new Date().toISOString()};saveLiveSessionState();renderLiveOverview(d.analysis,d.meta||{},true);$('liveOverviewResults').scrollIntoView({behavior:'smooth',block:'start'});
   }catch(e){error(e.message||String(e));}
   finally{show('liveOverviewLoading',false);$('liveOverviewBtn').disabled=liveSession.turns.length<2;}
 }
@@ -504,7 +518,14 @@ async function runAI(isFollowup=false){
     captureLiveAnalysis(d);
     renderResults(d.analysis,d.meta);
     saveHistoryEntry();
-    if(d.analysis.status==='needs_clarification' && d.analysis.questions?.length){renderQuestions(d.analysis.questions);show('clarification',true);$('clarification').scrollIntoView({behavior:'smooth',block:'start'});} else {show('clarification',false);$('results').scrollIntoView({behavior:'smooth',block:'start'});}
+    if(session.source==='live'){
+      // Quick Live is response-first. Adaptive qualifying questions stay inside the
+      // live response card and are only surfaced when addressing the other person.
+      show('clarification',false);
+      $('results').scrollIntoView({behavior:'smooth',block:'start'});
+    } else if(d.analysis.status==='needs_clarification' && d.analysis.questions?.length){
+      renderQuestions(d.analysis.questions);show('clarification',true);$('clarification').scrollIntoView({behavior:'smooth',block:'start'});
+    } else {show('clarification',false);$('results').scrollIntoView({behavior:'smooth',block:'start'});}
   }catch(e){error(e.message||String(e));}
   finally{setBusy(false);}
 }
@@ -766,6 +787,50 @@ function renderResults(a,meta){
   const liveQuickPanel=session.source==='live'?`<section class="card full live-quick-response-card"><div class="section-kicker">QUICK LIVE RESPONSE</div>${liveResponseTargetSwitch}<h2 id="liveSelectedResponseTitle">${selectedLiveKey==='best'?'Best next response':`Selected response — ${escapeHtml(liveResponseLabel(selectedLiveKey))}`} to ${escapeHtml(responseTargetLabel(selectedLiveTarget))}</h2><div id="liveSelectedResponseText" class="quote">${escapeHtml(selectedLiveText)}</div>${liveResponseChoices}${liveResponseControls}</section>`:'';
   const generalSet=responseSetForAnalysis(a,generalResponseTarget);
   const generalResponsePanel=session.source==='live'?'':`<section class="card full response-panel"><div class="section-kicker">RESPONSE</div><h2>What to say next</h2><div class="response-target-wrap"><div class="live-response-prompt"><strong>Respond to</strong><span class="muted">Switch the audience without rerunning the analysis.</span></div><div class="response-target-switch"><button type="button" class="response-target-btn general-response-target ${generalResponseTarget==='other_person'?'selected':''}" data-response-target="other_person">Other person</button><button type="button" class="response-target-btn general-response-target ${generalResponseTarget==='therapist'?'selected':''}" data-response-target="therapist">Therapist</button></div></div><p class="muted">Recommended wording to <strong id="generalResponseAudience">${escapeHtml(responseTargetLabel(generalResponseTarget))}</strong></p><div id="generalResponseQuote" class="quote">${escapeHtml(generalSet.best)}</div><details class="response-alternatives-details"><summary>Alternative responses</summary><div class="live-response-choice-grid"><div class="response-alt-card"><strong>Clarify</strong><span id="generalResponse-clarify">${escapeHtml(generalSet.clarify)}</span></div><div class="response-alt-card"><strong>Evidence</strong><span id="generalResponse-evidence">${escapeHtml(generalSet.evidence)}</span></div><div class="response-alt-card"><strong>Direct</strong><span id="generalResponse-direct">${escapeHtml(generalSet.direct)}</span></div><div class="response-alt-card"><strong>De-escalate</strong><span id="generalResponse-deescalating">${escapeHtml(generalSet.deescalating)}</span></div></div></details></section>`;
+
+  if(session.source==='live'){
+    const liveQuestions=(a.questions||[]);
+    const qualifierList=liveQuestions.length?liveQuestions.map((q,i)=>`<div class="live-qualifier-item"><strong>${i+1}. ${escapeHtml(q.question||'')}</strong>${q.why_needed?`<div class="muted">${escapeHtml(q.why_needed)}</div>`:''}</div>`).join(''):'';
+    const liveQualifierPanel=liveQuestions.length?`<details id="liveQualifyingQuestions" class="live-qualifying-details ${selectedLiveTarget==='other_person'?'':'hidden'}"><summary>Qualifying questions to ask them <span class="detail-count">${liveQuestions.length}</span></summary><p class="muted">Use these only if you need more information before treating the analysis as settled. If they answer, enter the answer as their next statement.</p>${qualifierList}</details>`:'';
+    const preliminary=a.status==='needs_clarification'?'<div class="live-preliminary-note"><strong>Preliminary:</strong> More information could change the analysis, so the response is weighted toward clarification rather than a verdict.</div>':'';
+    const liveFallacySummary=(a.likely_fallacies||[]).length?(a.likely_fallacies||[]).map(f=>`<div class="mini-analysis"><div><span class="group-badge">${escapeHtml(f.group||'')}</span> <strong>${escapeHtml(f.name||'Reasoning issue')}</strong> <span class="muted">${Number(f.match_score||0)}% match</span></div><p>${escapeHtml(f.why_it_fits||'')}</p></div>`).join(''):'<p class="muted">No strong fallacy match identified. The statement may need clarification or may not contain a clear reasoning error.</p>';
+    const evidenceAgreement=`<div class="live-detail-grid"><div><h3>Evidence quality</h3><p><strong>${escapeHtml(humanize(evidence.quality||'unknown'))}</strong></p><p>${escapeHtml(evidence.assessment||'')}</p><p class="muted"><strong>Strongest source:</strong> ${escapeHtml(evidence.strongest_source||'Not identified')}</p><p class="muted"><strong>Missing:</strong> ${escapeHtml(evidence.missing_evidence||'Nothing specified')}</p></div><div><h3>Burden of proof</h3><p>${escapeHtml(a.burden_of_proof?.explanation||'')}</p>${a.burden_of_proof?.next_move?`<div class="quote">${escapeHtml(a.burden_of_proof.next_move)}</div>`:''}</div></div>${agreementSection||'<p class="muted">No agreement issue identified in this statement.</p>'}`;
+    const repairDetail=(repairSection||repairEvidenceSection)?`${repairSection}${repairEvidenceSection}`:'<p class="muted">No repair-status issue identified in this statement.</p>';
+    const unresolvedDetail=`<div class="live-detail-grid"><div><h3>Still unresolved</h3>${list(a.unresolved_points)}</div><div><h3>What would change the result?</h3>${list(a.what_would_change_result)}</div></div>`;
+    const commonGroundDetail=`<div class="live-detail-grid"><div><h3>Established / supported</h3>${list(a.established_points)}</div><div><h3>Current disagreement</h3><p><strong>${escapeHtml(humanize(disagreement.type||'none_apparent'))}</strong></p><p>${escapeHtml(disagreement.explanation||'')}</p></div></div>`;
+    const fullReasoning=`<section class="live-subsection"><div class="section-kicker">REASONING BRIDGE</div><div class="bridge"><div class="bridge-box"><strong>Starting point</strong><br>${escapeHtml(bridge.starting_point||'')}</div><div class="bridge-arrow">→</div><div class="bridge-box"><strong>Added inference</strong><br>${escapeHtml(bridge.added_inference||'')}</div><div class="bridge-arrow">→</div><div class="bridge-box"><strong>Conclusion</strong><br>${escapeHtml(bridge.conclusion||'')}</div></div><p><strong>Bridge assessment:</strong> ${escapeHtml(bridge.bridge_assessment||'')}</p></section>${dependencySection}${contradictionSection}${counterSection}<section class="card"><div class="section-kicker">TIME / RELEVANCE</div><p><strong>Time scope:</strong> ${escapeHtml(a.temporal_relevance?.time_scope||'Not established')}</p><p>${escapeHtml(a.temporal_relevance?.assessment||'')}</p></section>${severitySection}<section class="card full"><div class="section-kicker">LIKELY REASONING TRAPS</div>${fallacies||'<p class="muted">No strong fallacy match yet.</p>'}</section><section class="card"><div class="section-kicker">MORE PRECISE WORDING</div><div class="quote">${escapeHtml(a.better_wording||'')}</div></section><section class="card"><div class="section-kicker">CHECK MY RESPONSE</div><textarea id="responseCheckText" rows="3" maxlength="1800" placeholder="Paste or write a response you want to check."></textarea><div class="actions"><button id="checkResponseBtn" class="primary" type="button">Analyze this response</button></div></section><section class="card"><strong>Caution:</strong> ${escapeHtml(a.caution||'')}</section><div class="copy-row"><button class="mini-btn" id="copyBtn">Copy analysis</button><button class="mini-btn" onclick="window.print()">Print / PDF</button></div>`;
+    const liveQuickPanelCompact=`<section class="card live-quick-response-card live-primary-response"><div class="section-kicker">QUICK LIVE RESPONSE</div>${liveResponseTargetSwitch}${preliminary}<h2 id="liveSelectedResponseTitle">${selectedLiveKey==='best'?'Best next response':`Selected response — ${escapeHtml(liveResponseLabel(selectedLiveKey))}`} to ${escapeHtml(responseTargetLabel(selectedLiveTarget))}</h2><div id="liveSelectedResponseText" class="quote live-main-response">${escapeHtml(selectedLiveText)}</div>${liveResponseChoices}${liveQualifierPanel}${liveResponseControls}</section>`;
+    const repairDetailsBlock=(repair.applies||a.repair_evidence_mapping?.applies)?`<details class="live-detail-card"><summary><span>4. Repair status</span><span class="detail-hint">Behavioral vs emotional repair</span></summary><div class="live-detail-body">${repairDetail}</div></details>`:'';
+    $('results').innerHTML=`
+      <div class="live-results-stack">
+        ${liveQuickPanelCompact}
+        <div class="live-detail-stack" aria-label="Analysis details">
+          <details class="live-detail-card"><summary><span>1. Why this response?</span><span class="detail-hint">Reasoning summary</span></summary><div class="live-detail-body"><div class="analysis-verdict"><span class="type-badge">${escapeHtml(humanize(outcome.verdict||'insufficient_information'))}</span><span class="type-badge">${escapeHtml(humanize(outcome.confidence||'low'))} confidence</span></div><p>${escapeHtml(a.summary||'')}</p><p>${escapeHtml(outcome.explanation||'')}</p>${bridge.bridge_assessment?`<div class="quote"><strong>Key reasoning bridge:</strong> ${escapeHtml(bridge.bridge_assessment)}</div>`:''}</div></details>
+          <details class="live-detail-card"><summary><span>2. Claim analysis</span><span class="detail-hint">Claim type & possible fallacies</span></summary><div class="live-detail-body"><h3>${escapeHtml(humanize(a.claim_status?.classification||'unknown'))}</h3><p>${escapeHtml(a.claim_status?.explanation||'')}</p>${parts||'<p class="muted">No claim parts returned.</p>'}<h3>Likely reasoning traps</h3>${liveFallacySummary}</div></details>
+          <details class="live-detail-card"><summary><span>3. Evidence & agreements</span><span class="detail-hint">Support, burden & terms</span></summary><div class="live-detail-body">${evidenceAgreement}</div></details>
+          ${repairDetailsBlock}
+          <details class="live-detail-card"><summary><span>${repairDetailsBlock?'5':'4'}. Unresolved questions</span><span class="detail-hint">What is still missing?</span></summary><div class="live-detail-body">${unresolvedDetail}</div></details>
+          <details class="live-detail-card"><summary><span>${repairDetailsBlock?'6':'5'}. Common ground & disputed points</span><span class="detail-hint">What can be parked?</span></summary><div class="live-detail-body">${commonGroundDetail}</div></details>
+          <details class="live-detail-card"><summary><span>${repairDetailsBlock?'7':'6'}. Full reasoning details</span><span class="detail-hint">Show the complete analysis</span></summary><div class="live-detail-body">${fullReasoning}</div></details>
+          <details class="live-detail-card"><summary><span>${repairDetailsBlock?'8':'7'}. Session history</span><span class="detail-hint">${liveSession.turns.length} entered statement${liveSession.turns.length===1?'':'s'}</span></summary><div id="liveHistoryInResults" class="live-detail-body">${liveSessionHistoryMarkup()}</div></details>
+        </div>
+      </div>`;
+    show('results',true);
+    if($('liveHistoryFallback'))$('liveHistoryFallback').classList.add('hidden');
+    $('copyBtn')?.addEventListener('click',copyAnalysis);
+    $('checkResponseBtn')?.addEventListener('click',analyzeProposedResponse);
+    document.querySelectorAll('.live-response-target').forEach(btn=>btn.addEventListener('click',()=>selectLiveResponseTarget(btn.dataset.responseTarget)));
+    document.querySelectorAll('.live-response-choice').forEach(btn=>btn.addEventListener('click',()=>selectLiveResponse(btn.dataset.liveResponseKey)));
+    $('liveUsedResponseBtn')?.addEventListener('click',()=>markLiveResponse('used'));
+    $('liveModifiedResponseBtn')?.addEventListener('click',()=>markLiveResponse('modified'));
+    $('liveDidNotUseResponseBtn')?.addEventListener('click',()=>markLiveResponse('not_used'));
+    $('saveModifiedLiveResponseBtn')?.addEventListener('click',saveModifiedLiveResponse);
+    $('nextLiveStatementBtn')?.addEventListener('click',nextLiveStatement);
+    if(currentLiveTurn)renderLiveResponseStatus(currentLiveTurn);
+    renderLiveSession();
+    return;
+  }
+
   $('results').innerHTML=`
     <div class="result-grid">
       <section class="card summary-card full"><div class="section-kicker">CURRENT ANALYSIS</div><h2>${a.status==='needs_clarification'?'Preliminary analysis':'Analysis ready'}</h2><p>${escapeHtml(a.summary)}</p><div class="analysis-verdict"><span class="type-badge">${escapeHtml(humanize(outcome.verdict||'insufficient_information'))}</span><span class="type-badge">${escapeHtml(humanize(outcome.confidence||'low'))} confidence</span></div><p>${escapeHtml(outcome.explanation||'')}</p>${outcome.no_fallacy_reason?`<div class="muted">${escapeHtml(outcome.no_fallacy_reason)}</div>`:''}<div class="meta">${escapeHtml(meta?.model||'')}${cost}${routing}${local}${compact}</div></section>
