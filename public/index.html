@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0B3D91" />
+  <title>ClearSay — Claim. Clarify. Connect.</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="app-locked">
+<section id="legalGate" class="landing-gate" aria-labelledby="legalGateTitle">
+  <div class="landing-shell shell">
+    <div class="landing-card">
+      <div class="landing-brand-wrap">
+        <img src="/clearsay-bridge-mark.png" alt="ClearSay C and S bridge mark" class="legal-logo landing-logo top-logo">
+        <h1 id="legalGateTitle" class="landing-wordmark"><span class="clear">Clear</span><span class="say">Say</span></h1>
+        <div class="landing-tagline">CLAIM. CLARIFY. CONNECT.</div>
+      </div>
+      <p class="landing-lead">ClearSay helps you slow down a difficult conversation, separate what was said from what was inferred, and see where the real disagreement actually is.</p>
+
+      <section class="landing-section how-it-works" aria-labelledby="howItWorksTitle">
+        <div class="landing-section-heading">
+          <div class="section-kicker">HOW CLEARSAY WORKS</div>
+          <h2 id="howItWorksTitle">Three steps to a clearer conversation</h2>
+        </div>
+        <div class="landing-step-grid">
+          <article class="landing-step"><div class="landing-step-number">1</div><div><h3>Claim</h3><p>Start with the exact statement, not the whole argument.</p></div></article>
+          <article class="landing-step"><div class="landing-step-number">2</div><div><h3>Clarify</h3><p>Separate facts, feelings, interpretations, evidence, and reasoning.</p></div></article>
+          <article class="landing-step"><div class="landing-step-number">3</div><div><h3>Connect</h3><p>Move toward the real issue, a useful response, or the next question.</p></div></article>
+        </div>
+      </section>
+
+      <section class="landing-section" aria-labelledby="chooseWorkflowTitle">
+        <div class="landing-section-heading">
+          <div class="section-kicker">CHOOSE YOUR WORKFLOW</div>
+          <h2 id="chooseWorkflowTitle">Use ClearSay the way the conversation needs</h2>
+        </div>
+        <div class="landing-feature-grid">
+          <article class="landing-feature-card landing-feature-claim"><h3>Analyze a Statement</h3><p>Break down one exact claim and test the reasoning behind it.</p></article>
+          <article class="landing-feature-card landing-feature-live"><h3>Self-Guided</h3><p>Use ClearSay during a live conversation and build a running session history.</p></article>
+          <article class="landing-feature-card landing-feature-couples"><h3>Couples Live</h3><p>Take turns, stay on topic, and use structured support inside a shared room.</p></article>
+          <article class="landing-feature-card landing-feature-transcript"><h3>Paste Transcript</h3><p>Review an existing exchange and identify the clearest statements to analyze.</p></article>
+        </div>
+      </section>
+
+      <section class="landing-fit-grid" aria-label="When ClearSay is and is not a good fit">
+        <article class="landing-fit-card landing-best-for">
+          <div class="landing-fit-icon">✓</div>
+          <div><div class="section-kicker">BEST FOR</div><h2>Conversations that need structure</h2><ul><li>Sorting a claim from an interpretation</li><li>Testing reasoning without dismissing feelings</li><li>Preparing a calmer response</li><li>Keeping one issue in focus</li></ul></div>
+        </article>
+        <article class="landing-fit-card landing-not-for">
+          <div class="landing-fit-icon">!</div>
+          <div><div class="section-kicker">NOT FOR</div><h2>Decisions that require a professional</h2><ul><li>Emergency or immediate-safety decisions</li><li>Legal, custody, or medical determinations</li><li>Diagnosing a person or relationship</li><li>Proving who is right or what absolutely happened</li></ul></div>
+        </article>
+      </section>
+
+      <div class="landing-notice">
+        <div class="section-kicker">BEFORE YOU ENTER</div>
+        <h2>ClearSay supports thinking. It does not decide the truth for you.</h2>
+        <p>AI analysis can be incomplete or wrong. ClearSay is not therapy, legal advice, medical advice, crisis support, professional mediation, or a factual adjudication service. In Couples Live, shared content is visible to the other participant and may be exported.</p>
+      </div>
+
+      <div class="landing-cta-panel">
+        <div class="landing-cta-copy">
+          <strong>Ready to continue?</strong>
+          <span>Review the full Terms &amp; Conditions at any time. By continuing, you acknowledge ClearSay's limitations for this launch.</span>
+        </div>
+        <div class="landing-actions">
+          <a href="/terms.html" class="secondary terms-link" target="_blank" rel="noopener">Read Terms &amp; Conditions</a>
+          <button id="legalAcknowledgeBtn" class="primary landing-ack-btn" type="button">Acknowledge &amp; Enter ClearSay</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="appShell" class="app-shell hidden">
+<header class="hero">
+  <div class="shell brand-hero">
+    <img src="/clearsay-bridge-mark.png" alt="" class="brand-mark" aria-hidden="true">
+    <div class="brand-copy">
+      <h1>Clear<span>Say</span></h1>
+      <div class="eyebrow">CLAIM. CLARIFY. CONNECT.</div>
+    </div>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="analysis-mode-switch" role="tablist" aria-label="Input mode">
+    <button id="statementModeBtn" class="mode-btn selected" type="button" role="tab" aria-selected="true">Analyze a statement</button>
+    <button id="liveModeBtn" class="mode-btn" type="button" role="tab" aria-selected="false">Self-Guided</button>
+    <button id="couplesModeBtn" class="mode-btn" type="button" role="tab" aria-selected="false">Couples live</button>
+    <button id="transcriptModeBtn" class="mode-btn" type="button" role="tab" aria-selected="false">Paste transcript</button>
+  </div>
+
+  <section class="card dashboard-intro">
+    <div class="section-kicker">START HERE</div>
+    <h2>Choose your ClearSay workflow</h2>
+    <p class="muted">Analyze one statement, guide yourself through a live exchange, open a Couples Live room, or paste a transcript for review.</p>
+  </section>
+
+  <details id="historyPanel" class="card history-panel hidden">
+    <summary>Recent analyses <span id="historyCount" class="history-count"></span></summary>
+    <p class="muted">Saved only in this browser so you can reopen an earlier analysis without another API call.</p>
+    <div id="historyList"></div>
+    <div class="actions"><button id="clearHistoryBtn" class="secondary" type="button">Clear history</button></div>
+  </details>
+
+  <section id="statementMode" class="card intro">
+    <h2>Analyze a claim</h2>
+    <label for="claim">Exact claim or statement</label>
+    <textarea id="claim" rows="5" maxlength="4000" placeholder='Example: “You always ignore me because you don’t care.”'></textarea>
+    <details>
+      <summary>Optional context</summary>
+      <label for="context">Context</label>
+      <textarea id="context" rows="3" maxlength="5000" placeholder="Add context that may matter. The app will treat it as supplied context, not automatically as established fact."></textarea>
+    </details>
+    <div class="examples group-examples" aria-label="Example claims by reasoning group">
+      <button type="button" class="chip example group-example" data-group="Evidence" data-text="You must be hiding something because you can't prove that you're not." title="Example: You must be hiding something because you can't prove that you're not."><strong>1. Evidence</strong><span>Proof & support</span></button>
+      <button type="button" class="chip example group-example" data-group="Intent" data-text="You asked where I was going because you wanted to control me." title="Example: You asked where I was going because you wanted to control me."><strong>2. Intent</strong><span>Motive & mind reading</span></button>
+      <button type="button" class="chip example group-example" data-group="Feeling → Fact" data-text="I feel unwanted, so you don't want me." title="Example: I feel unwanted, so you don't want me."><strong>3. Feeling → Fact</strong><span>Emotion as proof</span></button>
+      <button type="button" class="chip example group-example" data-group="Memory" data-text="I distinctly remember you saying you would never change your mind." title="Example: I distinctly remember you saying you would never change your mind."><strong>4. Memory</strong><span>Recall & perception</span></button>
+      <button type="button" class="chip example group-example" data-group="Scale" data-text="You never support me." title="Example: You never support me."><strong>5. Scale</strong><span>Always, never, everything</span></button>
+      <button type="button" class="chip example group-example" data-group="Relevance" data-text="Why are we talking about my missed payment when you forgot my birthday?" title="Example: Why are we talking about my missed payment when you forgot my birthday?"><strong>6. Relevance</strong><span>Dodging & rerouting</span></button>
+      <button type="button" class="chip example group-example" data-group="Fairness" data-text="I yelled because I was overwhelmed, but you yelled because you're disrespectful." title="Example: I yelled because I was overwhelmed, but you yelled because you're disrespectful."><strong>7. Fairness</strong><span>Same rules both ways</span></button>
+      <button type="button" class="chip example group-example" data-group="Openness" data-text="If you deny that you're controlling, that only proves you're controlling." title="Example: If you deny that you're controlling, that only proves you're controlling."><strong>8. Openness</strong><span>What could change your mind?</span></button>
+    </div>
+    <div class="actions">
+      <button id="analyzeBtn" class="primary">Analyze with AI</button>
+      <button id="resetBtn" class="secondary">Start over</button>
+    </div>
+  </section>
+
+  <section id="liveMode" class="card hidden">
+    <div class="section-kicker">SELF-GUIDED</div>
+    <h2>Enter what the other person said</h2>
+    <p class="muted">You do not have to type both sides of the conversation. Enter the other person's important statement, use an app response if it helps, and confirm whether you actually used it. The app will carry the session forward.</p>
+    <div class="live-session-bar">
+      <div><strong id="liveSessionLabel">Current session</strong><div id="liveTurnCount" class="muted">0 statements analyzed</div></div>
+      <button id="clearLiveSessionBtn" class="mini-btn danger-mini" type="button">Clear session</button>
+    </div>
+    <label for="liveStatement">What did they say?</label>
+    <textarea id="liveStatement" rows="4" maxlength="1800" placeholder='Example: “I still feel hurt, so nothing was ever repaired.”'></textarea>
+    <details>
+      <summary>Optional quick context</summary>
+      <label for="liveContextNote">Context that may matter</label>
+      <textarea id="liveContextNote" rows="3" maxlength="1800" placeholder="Add only context that matters to this session. It will be treated as supplied context, not automatically as established fact."></textarea>
+    </details>
+    <div class="actions">
+      <button id="liveAnalyzeBtn" class="primary" type="button">Analyze what they said</button>
+      <button id="liveOverviewBtn" class="secondary" type="button" disabled>View session overview</button>
+    </div>
+    <div class="live-scope-note"><strong>Scope:</strong> This is a self-guided conversation aid, not a complete transcript. The overall view is based only on statements you enter and responses you confirm using.</div>
+    <div id="liveOverviewLoading" class="transcript-loading hidden"><div class="spinner"></div><span>Building the overall session analysis…</span></div>
+    <div id="liveOverviewResults" class="live-overview-shell hidden"></div>
+    <details id="liveHistoryFallback" class="live-history-fallback hidden"><summary>Session history</summary><div id="liveTimeline" class="live-timeline"></div></details>
+  </section>
+
+  <section id="couplesMode" class="card hidden couples-shell">
+    <div class="section-kicker">COUPLES LIVE • BETA</div>
+    <h2>Take turns. Read first. Analyze after send.</h2>
+    <p class="muted">One person creates a room and shares the session code. Only the person with the floor can type. The other person reads without a composer. When the floor passes, the next person starts a 1:00 response turn. Messages are sent exactly as written, then ClearSay analyzes the reasoning, evidence, claim strength, agreements, repair issues, and how each new message changes the conversation.</p>
+
+    <div id="couplesLobby">
+      <div class="couples-lobby-grid">
+        <div class="couples-lobby-card">
+          <h3>Create a session</h3>
+          <label for="couplesCreateName">Your display name</label>
+          <input id="couplesCreateName" maxlength="32" placeholder="Person A" autocomplete="off">
+          <label for="couplesCreateTopic">One topic or question for this session</label>
+          <textarea id="couplesCreateTopic" rows="3" maxlength="280" placeholder="Example: Was our repair agreement fulfilled?"></textarea>
+          <label for="couplesCreateCriteria">What would help answer or close this topic? <span class="muted">(optional)</span></label>
+          <textarea id="couplesCreateCriteria" rows="2" maxlength="500" placeholder="Example: Identify the original agreement, whether both accepted it, and whether the agreed behavior changed."></textarea>
+          <label for="couplesCreateDuration">Session length</label>
+          <select id="couplesCreateDuration">
+            <option value="15">15 minutes</option>
+            <option value="30" selected>30 minutes</option>
+            <option value="45">45 minutes</option>
+            <option value="60">60 minutes</option>
+          </select>
+          <div class="muted session-duration-note">Choose the full Couples Live window before creating the room. The session timer starts when the first 1:00 response turn begins. Each person gets the floor one at a time.</div>
+          <label class="consent-check"><input id="couplesCreateConsent" type="checkbox"> <span>I understand messages and shared session analysis are visible to the other participant and may be exported by either participant.</span></label>
+          <button id="couplesCreateBtn" class="primary" type="button">Create session code</button>
+        </div>
+        <div class="couples-lobby-card">
+          <h3>Join a session</h3>
+          <label for="couplesJoinCode">Session code</label>
+          <input id="couplesJoinCode" maxlength="8" placeholder="ABC123" autocomplete="off" autocapitalize="characters">
+          <label for="couplesJoinName">Your display name</label>
+          <input id="couplesJoinName" maxlength="32" placeholder="Person B" autocomplete="off">
+          <label class="consent-check"><input id="couplesJoinConsent" type="checkbox"> <span>I understand messages and shared session analysis are visible to the other participant and may be exported by either participant.</span></label>
+          <button id="couplesJoinBtn" class="primary" type="button">Join session</button>
+        </div>
+        <div class="couples-lobby-card">
+          <h3>Join as therapist / mediator</h3>
+          <p class="muted">Read-only access requires both participants to approve it first.</p>
+          <label for="couplesMediatorRoomCode">Session code</label>
+          <input id="couplesMediatorRoomCode" maxlength="8" placeholder="ABC123" autocomplete="off" autocapitalize="characters">
+          <label for="couplesMediatorCode">Mediator code</label>
+          <input id="couplesMediatorCode" maxlength="8" placeholder="MED123" autocomplete="off" autocapitalize="characters">
+          <label for="couplesMediatorName">Display name</label>
+          <input id="couplesMediatorName" maxlength="32" placeholder="Therapist / Mediator" autocomplete="off">
+          <button id="couplesMediatorJoinBtn" class="secondary" type="button">Join read-only</button>
+        </div>
+      </div>
+      <div class="live-scope-note"><strong>How it works:</strong> The app does not rewrite or stop messages before they are sent. Analysis happens afterward so each person can see how their own statements may strengthen, weaken, clarify, or complicate the underlying issue.</div>
+    </div>
+
+    <div id="couplesRoom" class="hidden">
+      <div class="couples-room-bar">
+        <div>
+          <div class="muted tiny-label">SESSION CODE</div>
+          <div class="couples-code-row"><strong id="couplesRoomCode" class="couples-code"></strong><button id="couplesCopyCodeBtn" class="mini-btn" type="button">Copy code</button></div>
+          <div id="couplesParticipants" class="muted"></div>
+        </div>
+        <div class="couples-room-actions">
+          <button id="couplesRefreshInsightsBtn" class="mini-btn" type="button">Conversation insights</button>
+          <button id="couplesExportTxtBtn" class="mini-btn" type="button">Export conversation</button>
+          <button id="couplesExportJsonBtn" class="mini-btn" type="button">Export full data</button>
+          <button id="couplesPrintBtn" class="mini-btn" type="button">Print / PDF</button>
+          <button id="couplesContinueBtn" class="mini-btn hidden" type="button">Continue unresolved issue</button>
+          <button id="couplesEndSessionBtn" class="mini-btn" type="button">End session early</button>
+          <button id="couplesLeaveBtn" class="mini-btn" type="button">Leave</button>
+          <button id="couplesEndBtn" class="mini-btn danger-mini hidden" type="button">Delete room</button>
+        </div>
+      </div>
+
+      <section id="couplesTopicPanel" class="couples-topic-panel">
+        <div class="couples-topic-top">
+          <div>
+            <div class="muted tiny-label">CURRENT TOPIC</div>
+            <div id="couplesTopicText" class="couples-topic-text"></div>
+            <div id="couplesTopicCriteria" class="couples-topic-criteria hidden"></div>
+            <div id="couplesTopicStatus" class="muted"></div>
+          </div>
+          <div id="couplesTimer" class="couples-timer">30:00</div>
+        </div>
+        <div id="couplesTopicConfirmWrap" class="hidden">
+          <p class="muted">Both people must confirm the same topic before the conversation begins.</p>
+          <button id="couplesConfirmTopicBtn" class="primary" type="button">Confirm this topic</button>
+        </div>
+        <details id="couplesCloseTopicDetails" class="couples-topic-close hidden">
+          <summary>Close current topic</summary>
+          <p class="muted">A new topic cannot become active until both people formally close this one with the same status.</p>
+          <label for="couplesCloseStatus">How should this topic close?</label>
+          <select id="couplesCloseStatus">
+            <option value="resolved">Resolved</option>
+            <option value="partially_resolved">Partially resolved</option>
+            <option value="unresolved_more_evidence">Unresolved — more evidence needed</option>
+            <option value="unresolved_value_preference">Unresolved — value / preference disagreement</option>
+            <option value="deferred_mutual">Deferred by mutual agreement</option>
+          </select>
+          <label for="couplesCloseNote">What remains unresolved? (optional)</label>
+          <textarea id="couplesCloseNote" rows="2" maxlength="500" placeholder="Keep this specific."></textarea>
+          <button id="couplesCloseTopicBtn" class="secondary" type="button">Submit topic status</button>
+          <div id="couplesClosureVotes" class="muted"></div>
+        </details>
+        <div id="couplesNextTopicWrap" class="hidden">
+          <div class="section-kicker">CURRENT TOPIC CLOSED</div>
+          <p class="muted">If time remains, propose the next topic. The other person must confirm it before messages resume. The selected session timer does not reset.</p>
+          <textarea id="couplesNextTopic" rows="2" maxlength="280" placeholder="Next topic or question"></textarea>
+          <textarea id="couplesNextCriteria" rows="2" maxlength="500" placeholder="What would help answer or close this topic? (optional)"></textarea>
+          <button id="couplesNextTopicBtn" class="secondary" type="button">Propose next topic</button>
+        </div>
+      </section>
+
+      <details id="couplesParkingDetails" class="couples-parking hidden">
+        <summary>Issues saved for later <span id="couplesParkingCount" class="type-badge">0</span></summary>
+        <div id="couplesParkingList"></div>
+      </details>
+
+      <details id="couplesClaimLedgerDetails" class="couples-toolbox hidden">
+        <summary>Claim ledger <span id="couplesClaimLedgerCount" class="type-badge">0</span></summary>
+        <p class="muted">Tracks how important claims change, narrow, strengthen, weaken, get corrected, or are withdrawn as the session continues.</p>
+        <div id="couplesClaimLedger"></div>
+      </details>
+
+      <details id="couplesAgreementsDetails" class="couples-toolbox">
+        <summary>Shared agreements <span id="couplesAgreementCount" class="type-badge">0</span></summary>
+        <div id="couplesAgreementList"></div>
+        <div id="couplesAgreementComposer">
+          <label for="couplesAgreementText">Propose exact agreement wording</label>
+          <textarea id="couplesAgreementText" rows="2" maxlength="700" placeholder="Example: We both agree that Tuesday evening will be protected time unless there is an emergency."></textarea>
+          <button id="couplesAgreementBtn" class="secondary" type="button">Propose agreement</button>
+        </div>
+      </details>
+
+      <details id="couplesEvidenceDetails" class="couples-toolbox">
+        <summary>Evidence notes <span id="couplesEvidenceCount" class="type-badge">0</span></summary>
+        <p class="muted">Participant-supplied evidence notes are recorded but are not independently verified by the app.</p>
+        <div id="couplesEvidenceList"></div>
+        <div id="couplesEvidenceComposer" class="couples-evidence-composer">
+          <label for="couplesEvidenceClaim">Related claim (optional)</label>
+          <select id="couplesEvidenceClaim"><option value="">General / topic-level evidence</option></select>
+          <div class="couples-tool-grid">
+            <div><label for="couplesEvidenceType">Evidence type</label><select id="couplesEvidenceType"><option value="direct_record">Direct record</option><option value="direct_observation">Direct observation</option><option value="contemporaneous_record">Contemporaneous record</option><option value="witness_report">Witness report</option><option value="memory">Memory</option><option value="hearsay">Hearsay</option><option value="inference">Inference</option><option value="other">Other</option></select></div>
+            <div><label for="couplesEvidenceRelation">Effect</label><select id="couplesEvidenceRelation"><option value="supports">Supports</option><option value="opposes">Opposes</option><option value="neutral">Neutral / context</option></select></div>
+          </div>
+          <label for="couplesEvidenceText">What is the evidence?</label>
+          <textarea id="couplesEvidenceText" rows="2" maxlength="1000" placeholder="Describe the record, quote, observation, date, or other evidence."></textarea>
+          <button id="couplesEvidenceBtn" class="secondary" type="button">Add evidence note</button>
+        </div>
+      </details>
+
+      <details id="couplesMediatorDetails" class="couples-toolbox">
+        <summary>Therapist / mediator access</summary>
+        <p class="muted">A therapist or mediator can join read-only only after both participants approve access.</p>
+        <div id="couplesMediatorStatus"></div>
+        <div id="couplesMediatorActions"><button id="couplesMediatorAllowBtn" class="secondary" type="button">Allow mediator access</button><button id="couplesMediatorRevokeBtn" class="mini-btn" type="button">Revoke my approval</button></div>
+      </details>
+
+      <details id="couplesOutcomeDetails" class="couples-toolbox hidden">
+        <summary>Session outcome</summary>
+        <div id="couplesOutcome"></div>
+      </details>
+
+      <div id="couplesCurrentInsight" class="couples-current-insight hidden"></div>
+      <div id="couplesRelevanceNotice" class="couples-relevance-notice hidden" aria-live="polite"></div>
+      <div id="couplesInsights" class="couples-insights hidden"></div>
+
+      <section id="couplesTurnPanel" class="couples-turn-panel hidden" aria-live="polite">
+        <div class="couples-turn-copy">
+          <div class="tiny-label">CONVERSATION FLOOR</div>
+          <strong id="couplesTurnLabel">Waiting for the floor</strong>
+          <div id="couplesTurnHint" class="muted">Only the person with the floor can type.</div>
+        </div>
+        <div id="couplesTurnTimer" class="couples-turn-timer">01:00</div>
+      </section>
+
+      <div id="couplesTurnReady" class="couples-turn-ready hidden">
+        <p id="couplesTurnReadyText">Read the other person's message first. When you are ready to respond, start your 1:00 turn.</p>
+        <div class="actions compact-actions">
+          <button id="couplesStartTurnBtn" class="primary" type="button">Start my 1:00 turn</button>
+          <button id="couplesPassTurnReadyBtn" class="secondary" type="button">Pass turn</button>
+        </div>
+      </div>
+
+      <div id="couplesListeningPanel" class="couples-listening-panel hidden">
+        <strong>Listen / read</strong>
+        <p id="couplesListeningText" class="muted">The other person has the floor. Your message box will appear when it is your turn.</p>
+      </div>
+
+      <div id="couplesChat" class="couples-chat" aria-live="polite"></div>
+
+      <div id="couplesComposer" class="couples-composer hidden">
+        <label for="couplesMessage">Your response</label>
+        <textarea id="couplesMessage" rows="3" maxlength="1800" placeholder="Type your response…"></textarea>
+        <div class="couples-composer-foot">
+          <span class="muted">Only your active 1:00 turn allows typing. Sending passes the floor immediately.</span>
+          <div class="couples-composer-actions"><button id="couplesPassTurnBtn" class="secondary" type="button">Pass</button><button id="couplesSendBtn" class="primary" type="button">Send</button></div>
+        </div>
+      </div>
+      <div class="live-scope-note"><strong>Beta room storage:</strong> Couples Live rooms are held temporarily by this server and can disappear if the service restarts. Export important sessions. Detailed fallacy/evidence analysis is private to the person who wrote that message; the other participant sees the shared neutral effect on the conversation.</div>
+    </div>
+  </section>
+
+  <section id="transcriptMode" class="card hidden">
+    <div class="section-kicker">OPTIONAL CONVERSATION INPUT</div>
+    <h2>Paste a transcript</h2>
+    <textarea id="transcriptText" rows="12" maxlength="100000" placeholder="Paste a conversation, text exchange, SRT/VTT transcript, or speaker-by-speaker dialogue here."></textarea>
+    <div class="actions">
+      <button id="extractClaimsBtn" class="primary" type="button">Find claims in transcript</button>
+      <button id="clearTranscriptBtn" class="secondary" type="button">Clear transcript</button>
+    </div>
+    <div id="transcriptLoading" class="transcript-loading hidden"><div class="spinner"></div><span>Scanning the transcript for analyzable statements…</span></div>
+    <div id="transcriptResults" class="transcript-results hidden"></div>
+  </section>
+
+  <section id="claimQualification" class="card hidden">
+    <div class="section-kicker">CLARIFY THE CLAIM</div>
+    <h2>Before we test the reasoning</h2>
+    <p class="muted">The app first identifies what kind of claim is being made. You can keep the detected claim types or add one yourself. Answer what you know; leaving a question blank is okay.</p>
+    <div class="claim-type-picker-wrap">
+      <div class="qualifier-label">Claim type</div>
+      <div class="claim-type-help">Select any type that is part of the statement. <strong>Repair Status</strong> is for claims that an injury, broken agreement, or rupture has or has not been repaired or resolved.</div>
+      <div id="claimTypeChoices" class="claim-type-choices" aria-label="Claim type options"></div>
+    </div>
+    <div class="detected-label">Detected from the wording</div>
+    <div id="detectedClaimTypes" class="claim-type-row"></div>
+    <div id="claimQuestionList"></div>
+    <div class="actions">
+      <button id="qualifyContinueBtn" class="primary">Continue to analysis</button>
+    </div>
+  </section>
+
+  <section id="loading" class="card hidden loading-card">
+    <div class="spinner"></div>
+    <div><strong>Reasoning through the claim…</strong><div class="muted">Local routing is complete; AI is testing the strongest candidates and the reasoning bridge.</div></div>
+  </section>
+
+  <section id="errorBox" class="card error hidden"></section>
+
+  <section id="clarification" class="card hidden">
+    <div class="section-kicker">QUALIFYING QUESTIONS</div>
+    <h2>A few answers would change the analysis</h2>
+    <p class="muted">These are chosen adaptively. Answer what you know. “I don’t know” is a valid answer.</p>
+    <div id="questionList"></div>
+    <div class="actions"><button id="continueBtn" class="primary">Continue analysis</button></div>
+  </section>
+
+  <section id="results" class="hidden"></section>
+</main>
+
+<footer><div class="shell footer-row"><div><strong>ClearSay</strong> is a reasoning and communication aid, not a clinical, legal, or factual adjudication service. A weak argument can still point to a real concern.</div><a id="reviewLegalBtn" class="footer-link" href="/terms.html" target="_blank" rel="noopener">Terms &amp; Conditions</a></div></footer>
+</div>
+<script src="/app.js" defer></script>
+</body>
+</html>
