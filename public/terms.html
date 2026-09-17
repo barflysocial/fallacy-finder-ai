@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0B3D91" />
+  <title>ClearSay — Terms & Conditions</title>
+  <script>
+    try {
+      const saved = localStorage.getItem('clearSayThemeV186') || 'system';
+      const actual = saved === 'system' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : saved;
+      document.documentElement.dataset.theme = actual;
+      document.documentElement.style.colorScheme = actual;
+    } catch {}
+  </script>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="terms-page-body">
+  <div class="appearance-control" aria-label="Appearance setting">
+    <label for="termsThemeSelect">Appearance</label>
+    <select id="termsThemeSelect" aria-label="Choose light, dark, or system appearance">
+      <option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option>
+    </select>
+  </div>
+  <main class="shell terms-shell">
+    <div class="terms-topbar"><a href="/" class="footer-link">Back to ClearSay</a></div>
+    <section class="card terms-card">
+      <div class="legal-brand landing-brand">
+        <img src="/clearsay-bridge-mark.png" alt="ClearSay C and S bridge mark" class="legal-logo landing-logo">
+        <div><strong>ClearSay</strong><span>Claim. Clarify. Connect.</span></div>
+      </div>
+      <div class="section-kicker">TERMS & CONDITIONS</div>
+      <h1>Read before using ClearSay.</h1>
+      <div class="legal-copy terms-copy">
+        <p><strong>ClearSay is a reasoning and communication aid.</strong> It is not therapy, mental-health treatment, legal advice, medical advice, crisis support, a professional mediator, or a factual adjudication service.</p>
+        <p>AI output can be inaccurate, incomplete, or inappropriate. ClearSay does not determine whether a statement is true, whether someone intended harm, whether abuse occurred, whether an agreement is legally enforceable, or who is right.</p>
+        <p>Do not rely on ClearSay as the sole basis for legal, medical, financial, custody, safety, or emergency decisions.</p>
+        <div class="emergency-safety-notice terms-emergency" role="alert">
+          <strong>Emergency safety notice</strong>
+          <p>If you or anyone else is in immediate danger or at risk of serious harm, injury, or death—including harm to yourself or another person—call <strong>911 immediately</strong>. If you are outside the United States, call your local emergency number.</p>
+        </div>
+        <p>Using ClearSay does not create a therapist-client, attorney-client, doctor-patient, mediator-client, or any other professional relationship, privilege, or duty of care.</p>
+        <p>In Couples Live, messages and shared analysis are visible to the other participant and may be exported by either participant. Only enter information you are comfortable sharing with that participant.</p>
+        <p>You remain responsible for your own decisions, communications, and actions. ClearSay does not guarantee resolution, reconciliation, accuracy, or any particular outcome.</p>
+        <h2>Payments and paid access</h2>
+        <p>If paid access is enabled, the price, access period, and purchase details must be shown before checkout. Payments are processed by the configured third-party payment processor; ClearSay does not receive or store your full card or Apple Pay credentials. Any live launch should publish a clear refund/cancellation policy, tax treatment, privacy policy, and other legally required commercial terms before accepting customer payments.</p>
+        <p>By using ClearSay, you acknowledge these limitations, the emergency-safety notice above, and agree to use the product responsibly.</p>
+      </div>
+    </section>
+  </main>
+  <script>
+    (()=>{
+      const key='clearSayThemeV186';
+      const select=document.getElementById('termsThemeSelect');
+      let pref='system'; try{pref=localStorage.getItem(key)||'system';}catch{}
+      if(select) select.value=pref;
+      const apply=(value)=>{
+        const safe=['system','light','dark'].includes(value)?value:'system';
+        const actual=safe==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):safe;
+        document.documentElement.dataset.theme=actual; document.documentElement.style.colorScheme=actual;
+        try{localStorage.setItem(key,safe);}catch{}
+      };
+      select?.addEventListener('change',e=>apply(e.target.value));
+      matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{let v='system';try{v=localStorage.getItem(key)||'system';}catch{} if(v==='system')apply(v);});
+    })();
+  </script>
+</body>
+</html>
